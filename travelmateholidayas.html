@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TravelMate Holidays</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins}
+body{background:#f5f7fb}
+
+/* HEADER */
+header{
+  background:#0a66c2;
+  color:white;
+  padding:15px 40px;
+  display:flex;
+  justify-content:space-between;
+}
+nav a{color:white;margin:0 10px;text-decoration:none}
+
+/* HERO */
+.hero{
+  height:80vh;
+  background:url('https://source.unsplash.com/1600x900/?travel') center/cover;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  text-align:center;
+}
+
+/* SECTION */
+.section{padding:50px;text-align:center}
+
+/* CARDS */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+.card{
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+.card img{width:100%;height:200px;object-fit:cover}
+
+/* FORM */
+input,select{
+  padding:10px;
+  margin:10px;
+  width:80%;
+}
+button{
+  background:#ff6b00;
+  color:white;
+  padding:10px 20px;
+  border:none;
+  cursor:pointer;
+}
+
+/* LOGIN */
+.login-box{
+  background:white;
+  padding:20px;
+  max-width:400px;
+  margin:auto;
+  border-radius:10px;
+}
+
+/* ADMIN */
+.admin{
+  background:white;
+  margin:40px;
+  padding:20px;
+}
+.hidden{display:none}
+
+footer{
+  background:#111;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+<h2>TravelMate Holidays</h2>
+<nav>
+<a href="#home">Home</a>
+<a href="#destinations">Destinations</a>
+<a href="#packages">Packages</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+
+<!-- HOME -->
+<div class="hero" id="home">
+<div>
+<h1>Explore the World with TravelMate Holidays</h1>
+<p>Book your dream vacation today</p>
+</div>
+</div>
+
+<!-- DESTINATIONS -->
+<section class="section" id="destinations">
+<h2>Top Destinations</h2>
+<div class="cards">
+<div class="card"><img src="https://source.unsplash.com/400x300/?india"><h3>India - ₹16,999</h3></div>
+<div class="card"><img src="https://source.unsplash.com/400x300/?thailand"><h3>Thailand - ₹45,000</h3></div>
+<div class="card"><img src="https://source.unsplash.com/400x300/?dubai"><h3>Dubai - ₹55,000</h3></div>
+</div>
+</section>
+
+<!-- PACKAGES -->
+<section class="section" id="packages">
+<h2>Travel Packages</h2>
+
+<select id="filter" onchange="filterPackages()">
+<option value="all">All</option>
+<option value="16999">Under ₹16999</option>
+</select>
+
+<div class="cards" id="packageList"></div>
+</section>
+
+<!-- LOGIN -->
+<section class="section">
+<h2>Login / Register</h2>
+<div class="login-box">
+<input id="name" placeholder="Full Name">
+<input id="email" placeholder="Email">
+<input id="phone" placeholder="Phone">
+<input id="address" placeholder="Address">
+<button onclick="login()">Login</button>
+</div>
+</section>
+
+<!-- BOOKING -->
+<section class="section">
+<h2>Book Your Trip</h2>
+
+<input id="b_name" placeholder="Name" readonly>
+<input id="b_email" placeholder="Email" readonly>
+<input id="b_phone" placeholder="Phone" readonly>
+
+<select id="destination">
+<option>India</option>
+<option>Thailand</option>
+<option>Dubai</option>
+</select>
+
+<input type="date" id="date">
+
+<label>People (1–10)</label>
+<input type="number" id="people" min="1" max="10" value="1">
+
+<button onclick="book()">Book Now</button>
+</section>
+
+<!-- ADMIN -->
+<section class="admin">
+<h2>Admin Panel (All Logins & Bookings)</h2>
+<div id="adminData"></div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+<h2>Contact Us</h2>
+<p>📞 +91 8309024523</p>
+<p>📧 travelmateholidays.trips@gmail.com</p>
+<p>📍 Hyderabad - Near Hafeezpet RTA Office</p>
+
+<iframe width="100%" height="300"
+src="https://maps.google.com/maps?q=hafeezpet&t=&z=13&ie=UTF8&iwloc=&output=embed">
+</iframe>
+</section>
+
+<footer>
+<p>© 2026 TravelMate Holidays</p>
+</footer>
+
+<script>
+
+// PACKAGES DATA
+const packages = [
+{name:"Goa",price:16000},
+{name:"Manali",price:25000},
+{name:"Dubai",price:50000}
+];
+
+function loadPackages(list=packages){
+let html="";
+list.forEach(p=>{
+html+=`<div class="card"><h3>${p.name} - ₹${p.price}</h3></div>`;
+});
+document.getElementById("packageList").innerHTML=html;
+}
+loadPackages();
+
+// FILTER
+function filterPackages(){
+const val=document.getElementById("filter").value;
+if(val==="16999"){
+loadPackages(packages.filter(p=>p.price<=16999));
+}else{
+loadPackages();
+}
+}
+
+// LOGIN (SAVE USER)
+function login(){
+const user={
+name:document.getElementById("name").value,
+email:document.getElementById("email").value,
+phone:document.getElementById("phone").value,
+address:document.getElementById("address").value
+};
+
+localStorage.setItem("user",JSON.stringify(user));
+
+document.getElementById("b_name").value=user.name;
+document.getElementById("b_email").value=user.email;
+document.getElementById("b_phone").value=user.phone;
+
+alert("Login Successful");
+showAdmin();
+}
+
+// BOOKING
+function book(){
+const user=JSON.parse(localStorage.getItem("user"));
+const booking={
+name:user.name,
+destination:document.getElementById("destination").value,
+date:document.getElementById("date").value,
+people:document.getElementById("people").value
+};
+
+let bookings=JSON.parse(localStorage.getItem("bookings"))||[];
+bookings.push(booking);
+localStorage.setItem("bookings",JSON.stringify(bookings));
+
+// WhatsApp
+window.open(`https://wa.me/918309024523?text=Booking for ${booking.destination}`);
+
+// Email simulation
+alert("Booking Confirmed! (Email Sent)");
+
+showAdmin();
+}
+
+// ADMIN DISPLAY
+function showAdmin(){
+const user=JSON.parse(localStorage.getItem("user"));
+const bookings=JSON.parse(localStorage.getItem("bookings"))||[];
+
+let html="<h3>Users:</h3>";
+if(user){
+html+=`<p>${user.name} - ${user.email}</p>`;
+}
+
+html+="<h3>Bookings:</h3>";
+bookings.forEach(b=>{
+html+=`<p>${b.name} booked ${b.destination} for ${b.people} people</p>`;
+});
+
+document.getElementById("adminData").innerHTML=html;
+}
+
+</script>
+
+</body>
+</html>
